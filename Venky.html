@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timestamp Ordering in Databases: A Clear Guide</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fd;
+    margin: 0;
+    padding: 0;
+    color: #222;
+    line-height: 1.7;
+  }
+  .blog-container {
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+  }
+  h1 {
+    color: #1e40af;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2.5em;
+  }
+  h2 {
+    color: #2563eb;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+  }
+  h3 {
+    color: #374151;
+    margin-top: 20px;
+    font-size: 1.3em;
+  }
+  p { margin-bottom: 15px; }
+  ul { margin-left: 20px; margin-bottom: 20px; }
+  .section {
+    margin-bottom: 35px;
+    padding: 22px;
+    border-radius: 10px;
+    background-color: #f0f5ff;
+    border: 1px solid #c7d2fe;
+  }
+  .key-term {
+    font-weight: bold;
+    color: #10b981; /* green */
+  }
+  .example {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px dashed #93c5fd;
+    border-radius: 8px;
+    background-color: #e0f2fe;
+  }
+  .schedule {
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    margin: 12px 0;
+    padding: 12px;
+    background-color: #dbeafe;
+    border: 1px solid #60a5fa;
+    border-radius: 5px;
+  }
+  .conclusion {
+    margin-top: 40px;
+    padding: 20px;
+    border-left: 5px solid #3b82f6;
+    background-color: #fefefe;
+    font-style: italic;
+    color: #374151;
+  }
+</style>
+</head>
+<body>
+
+<div class="blog-container">
+  <h1>Timestamp Ordering in Databases: A Clear Guide</h1>
+
+  <div class="section">
+    <h2>What is Timestamp Ordering?</h2>
+    <p>When multiple transactions happen at the same time, the database needs a way to decide which one goes first. <span class="key-term">Timestamp Ordering</span> assigns a unique timestamp to each transaction to determine its priority. Older transactions get processed first, ensuring consistency across the database.</p>
+  </div>
+
+  <div class="section">
+    <h2>How It Works</h2>
+    <p>Each transaction is given a timestamp at the moment it begins. Every data item in the database keeps track of two things:</p>
+    <ul>
+      <li><strong>Read Timestamp (R-timestamp):</strong> The timestamp of the last transaction that read the item.</li>
+      <li><strong>Write Timestamp (W-timestamp):</strong> The timestamp of the last transaction that wrote to the item.</li>
+    </ul>
+    <p>When a transaction attempts to read or write data:</p>
+    <ul>
+      <li>A read is allowed only if the last write occurred earlier than the transaction’s timestamp.</li>
+      <li>A write is allowed only if the last read and write occurred earlier than the transaction’s timestamp.</li>
+      <li>If these conditions are violated, the transaction is aborted and restarted with a new timestamp.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Example</h2>
+    <p>Consider two transactions:</p>
+    <div class="example">
+      <h3>Transactions:</h3>
+      <div class="schedule">
+        T1 (TS=5): R(A), W(B) <br>
+        T2 (TS=10): W(A), R(B)
+      </div>
+    </div>
+    <p>T1 is older and executes first. T2 may need to wait or restart if it tries to overwrite T1’s data, ensuring the database remains consistent and conflict-free.</p>
+  </div>
+
+  <div class="section">
+    <h2>Advantages</h2>
+    <ul>
+      <li>Ensures data consistency under concurrent operations.</li>
+      <li>Reduces risk of conflicts between transactions.</li>
+      <li>Non-blocking: transactions don’t wait for locks, which improves speed.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Disadvantages</h2>
+    <ul>
+      <li>Younger transactions might abort frequently in high-conflict scenarios.</li>
+      <li>Additional overhead is required to manage timestamps and restarts.</li>
+    </ul>
+  </div>
+
+  <div class="conclusion">
+    <p>Timestamp Ordering is a smart method to organize transactions in busy databases. By assigning priority to older transactions, it ensures safe and consistent updates. While it may lead to occasional restarts, it is an effective approach to prevent conflicts and maintain integrity in multi-user systems.</p>
+  </div>
+</div>
+
+</body>
+</html>
